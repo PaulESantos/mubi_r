@@ -1,0 +1,957 @@
+---
+title: "Introducción a la Programación con R Tidyverse"
+author: "Paul Efren Santos Andrade"
+subtitle: "Museo de Biodiversidad del Perú - MUBI<br>Agosto - 2023"
+editor: source
+format: 
+  revealjs: 
+    theme: RSSstyle.scss
+    self-contained: true
+    logo: "mubi.png"
+    footer: "Museo de Biodiversidad del Perú - [MUBI](https://mubi-peru.org/) - Slides: [Paul E. Santos Andrade](https://paulefrensa.rbind.io/)"
+---
+
+#  {visibility="hidden"}
+```{r include=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+penguins <- palmerpenguins::penguins
+```
+
+# Reproducibilidad {background-color="#005573"}
+
+## 
+
+### ¿Qué es la reproducibilidad?
+
+- La investigación reproducible puede ser recreada utilizando los materiales proporcionados.
+
+- Otros deberían poder seguir y reproducir completamente tu flujo de trabajo.
+
+- Esto generalmente implica poner a disposición tu código, datos y entorno.
+
+
+### ¿Por qué hacer que tu trabajo sea reproducible?
+
+- La reproducibilidad aumenta la responsabilidad. Otros pueden ver y verificar tu trabajo.
+
+- La reproducibilidad contribuye a nuestro conocimiento colectivo al compartir procesos en lugar de solo resultados.
+
+- La reproducibilidad nos anima a respetar y reflexionar sobre las limitaciones de nuestros datos y procesos.
+
+
+
+# {{< fa brands r-project >}} - CRAN {background-color="#005573"}
+
+
+# <img src="images/RLogo.svg" width=140px style="vertical-align: center;"></img>
+
+- Un lenguaje y entorno para cómputo estadístico y gráficos.
+
+- R fue inicialmente escrito por Ross Ihaka y Robert Gentleman.
+
+- Desde mediados de 1997, el Equipo Principal de R modifica la fuente de R.
+
+- R funciona en una amplia variedad de plataformas UNIX, Windows y MacOS.
+
+- R está diseñado teniendo en mente la exploración interactiva de datos.
+
+- Se actualiza con frecuencia. La versión actual es 4.3.1.
+
+# <img src="images/RLogo.svg" width=140px style="vertical-align: center;"></img> 
+
+- R es de código abierto y gratuito.
+
+- R cuenta con una comunidad.
+
+- Con R, puedes compartir tus métodos de análisis de datos de manera reproducible.
+
+- ¡Los paquetes (¡más de 18 mil en CRAN!) amplían las capacidades de R para ofrecer formas sencillas de llevar a cabo una amplia variedad de tareas.
+
+- R es una de las recomendaciones estándar de lenguaje para la ciencia de datos.
+
+- RStudio facilita hacer más con R.
+
+
+# <img src="images/RStudio-Logo-flat.svg" width=200px style="vertical-align: center;"></img>
+
+
+- Una interfaz amigable para el usuario
+
+- La capacidad de escribir y guardar scripts reutilizables
+
+- Acceso fácil a todos los datos importados y objetos creados (como variables, funciones, etc.)
+
+- Ayuda exhaustiva sobre cualquier objeto
+
+- Autocompletado de código
+
+- La capacidad de crear proyectos para organizar y compartir tu trabajo con tus colaboradores de manera más eficiente.
+
+
+
+## {background-color="#EDE8EA"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+<center>
+<img src="images/RLogo.svg" width=140px style="vertical-align: center;"></img>
+</center><br>
+![Engine](images/r_engine.jpg){#fig-surus width=100%}
+:::
+
+::: {.column width="50%"}
+<center>
+<img src="images/RStudio-Logo-flat.svg" width=300px style="vertical-align: center; display: inline-block;"></img>
+</center><br>
+![Dashboard](images/r_dashbord.jpg){#fig-hanno width=100%}
+:::
+:::
+
+::: aside
+[Statistical Inference via Data Science A ModernDive into R and the Tidyverse](https://moderndive.com/)
+:::
+
+## Interface de RStudio  {background-color="#EDE8EA"}
+
+<center>
+<img src="images/Rstudio_interface.png" width=900px heigth=400px  style="vertical-align: center; display: inline-block;"></img>
+</center>
+
+
+
+## Proyectos (RProject)
+
+- Los proyectos de R son archivos con la extensión .Rproj.
+
+- Designan un directorio de trabajo que comienza donde se encuentra el archivo .Rproj. No es necesario usar setwd().
+
+- También puedes configurar un proyecto de R asociado con un repositorio de GitHub para compartir tu trabajo con el público o un equipo.
+
+- Es bueno mantener datos, análisis y texto en una sola carpeta.
+
+
+## Proyectos (RProject)
+
+- Pueden crear un proyecto:
+
+<center>
+ `File → New project; choose New directory → New project`
+</center>
+
+- Ingresa un nombre para esta nueva carpeta ("directorio") y elige una ubicación conveniente para ella. Esta será tu directorio de trabajo.
+
+- Haz clic en `Create` en el proyecto.
+
+- Crea un archivo nuevo donde escribiremos nuestros scripts.
+
+- Ve a `File → New File → R script`. Haz clic en el ícono de guardar en tu barra de herramientas y guarda tu script como `script.R`.
+
+
+## R coding style
+
+- Límitate a 80 caracteres por línea.
+
+- Utiliza comentarios. No describas qué hace el código, sino explica por qué
+lo escribiste de esa manera.
+
+- Utiliza solo `←` para asignaciones, no `=`.
+
+- Crea una nueva linea de código cuando uses un pipe `|>`. 
+
+- Puedes leer más en [styleguide](https://google.github.io/styleguide/Rguide.html)
+
+
+## Crear objetos
+
+- `<-` es el operador de asignación.
+
+- Para asignar el valor 10 al objeto llamado `num_participants`, escribes:
+
+```{r echo=TRUE}
+num_participants <- 10
+```
+
+- Recuerda que los nombres:
+
+    - deben comenzar con una letra
+
+    - solo pueden contener letras, números, guiones bajos y puntos
+    
+- Ejecutar el nombre del objeto mostrará el objeto.
+
+```{r echo=TRUE}
+num_participants
+```
+
+## Funciones 
+
+Las funciones se construyen cuando se tienen secuencias de código estandarizadas para el desarrollo de operaciones. Tienen la siguiente forma:
+
+`function_name(argument1 = value1, argument2 = value2, ...)`
+
+```{r echo=TRUE}
+sqrt(16)
+seq(1, 14)
+```
+
+
+## Ayuda en R
+
+:::: {.columns}
+::: {.column width="50%"}
+- La documentación en línea para funciones y variables en R existe.
+
+- Se obtiene escribiendo `help(function_name)` o `?function_name`.
+
+```{r echo=TRUE, eval=FALSE}
+help(sqrt)
+
+?sqrt
+```
+:::
+
+::: {.column width="50%"}
+
+<img src="images/rstudio_help.png"></img>
+
+:::
+::::
+
+
+
+## Librerias - paquetes
+
+- Los paquetes son colecciones de funciones R, datos y código compilado.
+
+- Existen funciones incorporadas como parte de los paquetes estándar o base de R y no es necesario descargarlas.
+
+```{r echo=TRUE, eval=FALSE}
+library(tidyverse)
+library(janitor)
+```
+
+- Algunas funciones no están incorporadas. Para obtenerlas, es necesario descargar paquetes.
+
+* Los paquetes de R amplían la funcionalidad de R.
+
+
+## Librerias - paquetes
+
+- Para descargar el paquete `tidyverse`:
+
+  - Desde CRAN
+  
+```{r echo=TRUE, eval=FALSE}
+install.packages("tidyverse")
+```
+  - En desarrollo `remotes` - `devtools`: 
+  
+```{r echo=TRUE, eval=FALSE}
+remotes::install_github("tidyverse/tidyverse")
+devtools::install_github("tidyverse/tidyverse")
+```
+
+  - En desarrollo `pak`:
+
+```{r echo=TRUE, eval=FALSE}
+# install.packages("pak")
+pak::pak("tidyverse/tidyverse")
+```
+
+## Librerias - paquetes
+
+- Cada vez que descargues un paquete o inicies una nueva sesión en RStudio, deberás cargar los paquetes que deseas usar mediante.
+
+```{r echo=TRUE, eval=FALSE}
+library(tidyverse)
+
+library("tidyverse")
+
+require(tidyverse)
+```
+
+# Estructuras   {background-color="#005573"}
+
+## Tipos y estructuras de datos
+
+### Estructuras atómicas en R
+
+1. *character* se escriben entre comillas. `"bienvenido"`, `'hola mundo'` y `"2"` son de tipo caracter.
+
+- En algunos contextos, también pueden ser referidos como cadenas.
+
+2. *logical* son `TRUE` o `FALSE`.
+
+3. *double* es un número. `3.1`, `-73` y `2700` son todos dobles.
+
+4. *integer*, por ejemplo 100.
+---
+
+
+## Tipos y estructuras de datos
+
+### Estructuras atómicas en R
+
+```{r echo=TRUE}
+typeof("bienvenido")
+typeof(FALSE)
+typeof(3.14)
+typeof(100L)
+```
+
+## Tipos y estructuras de datos
+
+### Vectores
+
+Podemos construir vectores de datos de todos los tipos de datos atómicos. Todos los tipos de datos en un vector atómico deben coincidir.
+
+```{r echo=TRUE}
+
+vector_caracteres <- c("hola", "mundo", "2,000")
+letters[1:6]
+1:5
+
+```
+
+## Tipos y estructuras de datos
+
+####  data.frames - tibbles
+
+- R tiene `data.frames` para almacenar columnas y filas de datos, pero en tidyverse tenemos `tibbles` en su lugar.
+
+- Los `tibbles` son estructuras optimizadas. Todos los elementos del tibble deben ser vectores con la misma longitud. Lo mismo se aplica a los `data.frames`.
+
+
+## Tipos y estructuras de datos
+
+####  data.frames - tibbles
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- Puedes crear un nuevo `tibble` de la siguiente manera
+
+```{r echo=TRUE}
+tibble::tibble(
+       x = 1:5,
+       y = 1,
+       z = letters[1:5]
+       )
+```
+:::
+
+::: {.column width="50%"}
+
+- Puedes crear un nuevo `data.frame` de la siguiente manera
+
+```{r echo=TRUE}
+data.frame(
+       x = 1:5,
+       y = 1,
+       z = letters[1:5]
+       )
+```
+:::
+
+::::
+
+
+## Tidyverse {background-color="#005573"}
+
+<center>
+<img src="images/tidyverse_packages_purpose.png" style="height: 500px; width: 1000px"></img>
+</center>
+
+
+## Pipes
+
+-   Magrittr pipe `%>%` (2014+)
+
+-   Pipe nativo de R `|>` (2021+, R $\geq$ 4.1.0)
+
+2022 Isabella Velásquez Entendiendo el pipe nativo de R \|\> <https://ivelasq.rbind.io/blog/understanding-the-r-pipe/>
+
+. . .
+
+<brshort>
+
+::: columns
+::: {.column width="50%"}
+```{r echo=TRUE, eval=FALSE}
+whatever(arg1, arg2, arg3, ...)
+
+arg1 |>  
+  whatever(arg2, arg3)
+```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="45%"}
+```{r echo=TRUE, eval=FALSE}
+mean(0:10)
+
+0:10 |> 
+  mean()
+```
+
+:::
+:::
+
+<center>
+Combinacion de teclas `CTRL + Shift + M` pipe:
+
+`Tools -> Global Options -> Code -> `
+   
+&nbsp;&nbsp; `Editing -> check Use Native Pipe Operator`
+</center>
+
+
+## Namespacing
+
+<center>
+**paquete::funcion()** - `dplyr::select( )`
+</center>
+
+
+- Indica explícitamente a R que use la función `select( )` del paquete `dplyr`
+
+- Puede ayudar a evitar conflictos de nombres (por ejemplo, `MASS::select()`)
+
+- No requiere `library()`
+
+. . .
+
+::: columns
+::: {.column width="45%"}
+```{r echo=TRUE, eval=FALSE}
+library(dplyr)
+
+select(mtcars, mpg, cyl) 
+
+mtcars |>  
+  select(mpg, cyl) 
+```
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+```{r echo=TRUE, eval=FALSE}
+# library(dplyr) no requerida
+
+dplyr::select(mtcars, mpg, cyl) 
+
+mtcars |>  
+  dplyr::select(mpg, cyl) 
+```
+:::
+:::
+
+
+## `readr` {background-image="images/readr.svg" background-size="8%" background-position="98% 4%"}
+
+
+> El objetivo de `readr` es proporcionar una forma rápida y amigable de leer datos rectangulares y llevarlos a R.
+
+##### Puedes importar datos con...
+
+- Archivos separados por comas (CSV) `read_csv()`
+- Archivos de texto separados por tabuladores `read_tsv()`
+- Archivos delimitados generales `read_delim()` delimitados con barra vertical "|".
+
+```{r echo=TRUE, eval=FALSE}
+
+data <- readr::read_csv("data/mis_datos.csv")
+
+```
+
+
+## `readxl` {background-image="images/readxl.svg" background-size="8%" background-position="98% 4%"}
+
+> El paquete readxl facilita la tarea de obtener datos de Excel y llevarlos a R.
+
+##### Puedes importar datos con...
+
+- Archivos *.xls* `read_xls()`
+- Archivos *.xlsx* `read_tsv()`
+- Lista de nombres de hojas de un archivo excel `excel_sheets()`.
+
+```{r echo=TRUE, eval=FALSE}
+data <- readxl::read_excel("data/mis_datos.xlsx")
+data <- readxl::read_excel("data/mis_datos.xls")
+```
+
+
+## `tibble` {background-image="images/tibble.svg" background-size="8%" background-position="98% 4%"}
+
+- Un `tibble` o `tbl_df`es una reimaginación del esquema de un `data.frame`.
+- Tienen un método de impresión mejorado.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+### `data.frame`
+```{r echo=TRUE}
+mtcars[1:5, 1:5]
+```
+:::
+
+::: {.column width="50%"}
+### `tibble`
+```{r echo=TRUE}
+mtcars[1:5, 1:5] |> 
+  tibble::as_tibble()
+```
+:::
+
+::::
+
+
+## dplyr {background-image="images/dplyr.svg" background-size="8%" background-position="98% 4%"}
+
+> `dplyr` - gramática de manipulación de datos, proporcionando un conjunto consistente de verbos que ayudan a resolver los desafíos más comunes de manipulación de datos:
+
+- `mutate()` agrega nuevas variables que son funciones de variables existentes.
+- `select()` selecciona variables en función de sus nombres.
+- `filter()` selecciona casos en función de sus valores.
+- `summarise()` reduce varios valores a un único resumen.
+- `arrange()` cambia el orden de las filas.
+
+
+## `select()` {background-image="images/dplyr.svg" background-size="8%" background-position="98% 4%"}
+
+- Selecciona (y opcionalmente renombra) variables en un marco de datos, utilizando un mini-lenguaje conciso que hace fácil referirse a las variables según su nombre. Por ejemplo:
+- Por nombre, a:f selecciona todas las columnas desde "a" a la izquierda hasta "f" a la derecha.
+- Por tipo, `where(is.numeric)` selecciona todas las columnas numéricas.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "2-4"
+penguins |> 
+  select(species,
+         sex,
+         body_mass_g)
+```
+:::
+
+::: {.column width="50%"}
+```{r echo=FALSE}
+#| code-line-numbers: "2-4"
+penguins |> 
+  select(species,
+         sex,
+         body_mass_g) |> 
+  head()
+```
+:::
+
+::::
+
+
+
+
+## `arrange()` {background-image="images/dplyr.svg" background-size="8%" background-position="98% 4%"}
+
+- `arrange()` es una función de dplyr que permite ordenar las filas de un data.frame según los valores de una o varias columnas seleccionadas.
+
+- `desc()` transforma un vector en un formato que será ordenado en orden descendente.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, sex, body_mass_g) |>
+  arrange(desc(body_mass_g))
+```
+:::
+
+::: {.column width="50%"}
+```{r echo=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, sex, body_mass_g) |>
+  arrange(desc(body_mass_g))
+```
+
+:::
+::::
+
+
+## `group_by()` & `sumamrise()` {background-image="images/dplyr.svg" background-size="8%" background-position="98% 4%"}
+
+
+- `group_by()` se utiliza para dividir los datos en grupos basados en variables específicas.
+
+- `summarise()` se utiliza para resumir los datos dentro de cada uno de estos grupos.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "3-4"
+penguins |>
+  select(species, sex, body_mass_g) |>
+  group_by(species, sex) |>         
+  summarize(mean = mean(body_mass_g))
+```
+:::
+
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+#| code-line-numbers: "3-4"
+penguins |>
+  select(species, sex, body_mass_g) |>
+  group_by(species, sex) |>         
+  summarize(mean = mean(body_mass_g))
+```
+:::
+::::
+
+## `mutate()` {background-image="images/dplyr.svg" background-size="8%" background-position="98% 4%"}
+
+- `mutate()` crea nuevas columnas que son funciones de variables existentes. 
+- También puede modificar (si el nombre es el mismo que el de una columna existente) y eliminar columnas (estableciendo su valor en NULL).
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "5"
+penguins |>
+  count(species, sex) |>
+  add_count(species, wt = n, 
+            name = "n_species") |>
+  mutate(prop = n/n_species*100)
+```
+:::
+
+::: {.column width="50%"}
+```{r echo=FALSE}
+#| code-line-numbers: "5"
+penguins |>
+  count(species, sex) |>
+  add_count(species, wt = n, 
+            name = "n_species") |>
+  mutate(prop = n/n_species*100)
+```
+
+:::
+
+:::: 
+
+## `filter()` {background-image="images/dplyr.svg" background-size="8%" background-position="98% 4%"}
+
+- `filter()` se utiliza para filtrar un `data.frame`, manteniendo todas las filas que satisfacen condiciones especificas. 
+
+- Es importante tener en cuenta que cuando una condición se evalúa como `NA`, la fila se eliminará.
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "6"
+penguins |>
+  count(species, sex) |>
+  add_count(species, wt = n, 
+            name = "n_species") |>
+  mutate(prop = n/n_species*100) |>
+  filter(species == "Chinstrap")
+```
+:::
+
+::: {.column width="50%"}
+```{r echo=FALSE}
+#| code-line-numbers: "6"
+penguins |>
+  count(species, sex) |>
+  add_count(species, wt = n, 
+            name = "n_species") |>
+  mutate(prop = n/n_species*100) |>
+  filter(species == "Chinstrap")
+```
+:::
+
+::::
+
+## stringr {background-image="images/stringr.svg" background-size="8%" background-position="98% 4%"}
+
+
+- `stringr` proporciona un conjunto coherente de funciones diseñadas para hacer que trabajar con cadenas de texto sea lo más fácil posible.
+
+- El paquete incluye muchas funciones para ayudarnos con las **expresiones regulares**, las cuales son un lenguaje conciso para describir patrones en las cadenas de caracteres.
+
+- [`RegExplain`](https://www.garrickadenbuie.com/project/regexplain/)
+
+## stringr {background-image="images/stringr.svg" background-size="8%" background-position="98% 4%"}
+ 
+- **Estas funciones nos ayudan a:**
+
+- Detectar coincidencias `str_detect()`.
+- Obtener sub conjuntos de las cadenas de texto `str_sub()`.
+- Manejar longitudes de cadenas de texto `str_length()`.
+- Modificar las cadenas de texto `str_to_upper()` - `str_to_lower()` -`str_to_sentence()`
+- Unir y dividir cadenas de texto `str_c()` - `str_split()`
+
+
+## stringr {background-image="images/stringr.svg" background-size="8%" background-position="98% 4%"}
+
+### Modificación
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Mayusculas
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  mutate(ISLAND = str_to_upper(island))
+```
+:::
+
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  mutate(ISLAND = str_to_upper(island))
+```
+:::
+::::
+
+## stringr {background-image="images/stringr.svg" background-size="8%" background-position="98% 4%"}
+
+### Modificación
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Minusculas.
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  mutate(ISLAND = str_to_lower(island))
+```
+
+:::
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  mutate(ISLAND = str_to_lower(island))
+```
+:::
+::::
+
+
+## stringr {background-image="images/stringr.svg" background-size="8%" background-position="98% 4%"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Coincidencia
+
+- `str_detect()`
+- "Adelie" - "Gentoo" - "Chinstrap"
+
+```{r echo=TRUE,eval=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  filter(str_detect(species, "Gent"))
+```
+:::
+
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  filter(str_detect(species, "Gent"))
+```
+:::
+::::
+
+
+
+## stringr {background-image="images/stringr.svg" background-size="8%" background-position="98% 4%"}
+
+- [Expresiones regulares](https://rstudio-pubs-static.s3.amazonaws.com/74603_76cd14d5983f47408fdf0b323550b846.html) - Una expresión regular, también conocida como regex, regexp o expresión racional, es una secuencia de caracteres que establece un patrón de búsqueda. Su uso principal es para buscar patrones específicos dentro de cadenas de caracteres o para llevar a cabo operaciones de reemplazo en texto.
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  filter(str_detect(island, "^T"))
+```
+:::
+
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+#| code-line-numbers: "3"
+penguins |>
+  select(species, island) |>
+  filter(str_detect(island, "^T"))
+```
+:::
+
+::::
+
+
+## tidyr {background-image="images/tidyr.svg" background-size="8%" background-position="98% 4%"}
+
+> Hay tres reglas interrelacionadas que hacen que un conjunto de datos se considere en [formato tidy](https://r4ds.had.co.nz/tidy-data.html) :
+
+ - Cada variable debe tener su propia columna.
+ - Cada observación debe tener su propia fila.
+ - Cada valor debe tener su propia celda.
+ <center>
+![](https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png){width=1200px fig-alt="schematic representing the 3 earlier points"}
+</center>
+
+
+
+## tidyr {background-image="images/tidyr.svg" background-size="8%" background-position="98% 4%"}
+
+### Un-tidying  `pivot_wider()`
+
+```{r echo=TRUE}
+#| code-line-numbers: "2-3"
+penguins |>
+  pivot_wider(names_from = sex,
+              values_from = body_mass_g)
+
+```
+
+
+## tidyr {background-image="images/tidyr.svg" background-size="8%" background-position="98% 4%"}
+
+### Re-tidying  `pivot_longer()`
+
+```{r eval=TRUE, echo=FALSE}
+untidy_penguins <- penguins |>
+  pivot_wider(names_from = sex,
+              values_from = body_mass_g)
+```
+
+
+```{r echo=TRUE}
+#| code-line-numbers: "2,3,4"
+untidy_penguins |>
+  pivot_longer(cols = male:`NA`,           
+               names_to = "sex",           
+               values_to = "body_mass_g")
+```
+
+
+## Matriz de comunidad
+
+```{r echo=TRUE}
+library(vegan)
+data("dune")
+dune[1:12, 1:8]
+```
+
+## Matriz de comunidad
+
+```{r echo=TRUE, eval=FALSE}
+pak::pak("PaulESantos/diversity.tool")
+library(diversity.tool)
+dune_tbl <- dune |> 
+  comm_to_tbl()
+
+dune_tbl
+```
+
+```{r echo=FALSE}
+library(diversity.tool)
+#| code-line-numbers: "2"
+dune |> 
+  comm_to_tbl()
+
+```
+
+## Matriz de comunidad
+
+
+```{r echo=TRUE, eval=FALSE}
+#| code-line-numbers: "2,3,4"
+dune_comm <- dune_tbl %>% 
+  tbl_to_comm(site = site,
+              taxon = species, 
+              abun = abundance)
+dune_comm
+```
+
+```{r echo=FALSE}
+library(diversity.tool)
+dune_tbl <- dune |> 
+  comm_to_tbl()
+
+dune_tbl %>% 
+  tbl_to_comm(site = site,
+              taxon = species, 
+              abun = abundance)
+
+
+```
+
+
+##  Gracias {background-color="#fafafa"}
+
+::: columns
+
+::: {.column width=50%}
+<center>
+<img style="border-radius: 50%;" src="mubi.png" width="750px"/>
+</center>
+:::
+
+::: {.column width=50%}
+
+<center>
+{{< fa brands twitter >}} [PaulEfrenSantos](https://twitter.com/PaulEfrenSantos)
+
+{{< fa brands github >}} [PaulESantos](https://github.com/PaulESantos)
+
+{{< fa globe >}} [paulefrensa.rbind.io](https://paulefrensa.rbind.io/)
+
+
+<img style="border-radius: 50%;" src="images/DSC_0140.JPG" width="350px"/>
+</center>
+
+:::
+
+:::

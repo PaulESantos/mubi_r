@@ -1,5 +1,2 @@
-# RSS International Conference 2023
-
-## Data visualisation: new best practice guidance from RSS publications
-
-Slides for the RSS International Conference 2023 workshop on data visualisation.
+# Taller de introduccion a la programacion en R Tidyverse
+Museo de Biodiversidad del Perú - MUBI
